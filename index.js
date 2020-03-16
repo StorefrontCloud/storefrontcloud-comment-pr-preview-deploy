@@ -9,10 +9,10 @@ const isPush = ({eventName, issue: { number }}) => {
   return true;
 }
 
-const upsertDeployComment = async (client, repo, commitHash, deployUrl, namespace, isPush, issue) => {
-  const { data: comments } = await client.repos.listCommentsForCommit({
+const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pullNumber) => {
+  const { data: comments } = await client.repos.listCommentsForIssue({
     ...repo,
-    commit_sha: commitHash
+    issue_number: issue.number
   });
 
   const DEPLOY_COMMENT_TEMPLATE = `:blue_heart: ${namespace} successfully deployed`;
@@ -20,28 +20,17 @@ const upsertDeployComment = async (client, repo, commitHash, deployUrl, namespac
   const newCommentBody = `${DEPLOY_COMMENT_TEMPLATE} at ${deployUrl}`
   if (!oldComment) {
     core.info(`deployment comment does not exist. creating new one.`)
-    isPush && await client.repos.createCommitComment({
-      ...repo,
-      commit_sha: commitHash,
-      body: newCommentBody
-    }) || await client.issues.createComment({ // or PR
+    await client.issues.createComment({
       ...repo,
       issue_number: issue.number,
       body: newCommentBody
     });
-
   } else { // update existing
     core.info(`deployment comment already exists. updating it with new deploy URL.`)
-    isPush && await client.repos.updateCommitComment({
-      ...repo,
-      comment_id: oldComment.id,
-      body: newCommentBody
-    }) || await client.issues.updateComment({ // or PR
-      ...repo,
+    await client.issues.updateComment({
       comment_id: oldComment.id,
       body: newCommentBody
     })
-
   }
 }
 
@@ -59,6 +48,6 @@ const upsertDeployComment = async (client, repo, commitHash, deployUrl, namespac
   }
 
   const octokit = new github.GitHub(githubToken);
-  await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue);
+  await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, prNumber);
   process.exit(1); // fail for tests
 })()
