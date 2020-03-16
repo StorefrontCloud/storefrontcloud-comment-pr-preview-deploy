@@ -49,7 +49,7 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
   }
   const octokit = new github.GitHub(githubToken);
   try {
-    await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, prNumber);
+    await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, payload.number);
   } catch (e) {
     core.setFailed(e && e.message || "unknown error");
   }
