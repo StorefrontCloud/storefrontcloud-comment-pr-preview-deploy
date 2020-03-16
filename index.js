@@ -9,7 +9,7 @@ const isPush = ({eventName, issue: { number }}) => {
   return true;
 }
 
-const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pullNumber) => {
+const upsertDeployComment = async (client, repo, deployUrl, namespace, pullNumber) => {
   const { data: comments } = await client.issues.listComments({
     ...repo,
     issue_number: pullNumber
@@ -38,10 +38,9 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
   const githubToken = core.getInput('token');
   const namespace = core.getInput('namespace');
   const previewUrl = core.getInput('preview_url');
-  const { sha: commitHash, repo, payload, issue} = github.context
+  const { repo, payload} = github.context
 
   const prNumber = payload.pull_request && payload.pull_request.number
-  console.log(payload.pull_request);
 
   if (!githubToken || !prNumber || !namespace) {
     core.setFailed('Some action arguments are missing. Action has failed.');
@@ -49,7 +48,7 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
   }
   const octokit = new github.GitHub(githubToken);
   try {
-    await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, payload.number);
+    await upsertDeployComment(octokit, repo, previewUrl, namespace, prNumber);
   } catch (e) {
     core.setFailed(e && e.message || "unknown error");
   }
