@@ -5,7 +5,6 @@ const isPush = ({eventName, issue: { number }}) => {
   if (number && eventName !== 'push') {
     return false;
   }
-  
   return true;
 }
 
