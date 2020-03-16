@@ -41,7 +41,7 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
   const { sha: commitHash, repo, payload, issue} = github.context
 
   const prNumber = payload.pull_request && payload.pull_request.number
-  console.log(payload);
+  console.log(payload.number);
 
   if (!githubToken || !prNumber || !namespace) {
     core.setFailed('Some action arguments are missing. Action has failed.');
