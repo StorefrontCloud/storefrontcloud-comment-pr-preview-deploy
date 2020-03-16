@@ -10,7 +10,7 @@ const isPush = ({eventName, issue: { number }}) => {
 }
 
 const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pullNumber) => {
-  const { data: comments } = await client.repos.listCommentsForIssue({
+  const { data: comments } = await client.issues.listComments({
     ...repo,
     issue_number: issue.number
   });
@@ -49,5 +49,5 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
 
   const octokit = new github.GitHub(githubToken);
   await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, prNumber);
-  process.exit(1); // fail for tests
+  core.setFailed('dont allow - debug purposes')
 })()
