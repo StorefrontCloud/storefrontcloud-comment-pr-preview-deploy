@@ -46,8 +46,11 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
     core.setFailed('Some action arguments are missing. Action has failed.');
     return;
   }
-
   const octokit = new github.GitHub(githubToken);
-  await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, prNumber);
+  try {
+    await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue, prNumber);
+  } catch (e) {
+    core.setFailed(e && e.message || "unknown error");
+  }
   core.setFailed('dont allow - debug purposes')
 })()
