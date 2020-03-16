@@ -12,7 +12,7 @@ const isPush = ({eventName, issue: { number }}) => {
 const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pullNumber) => {
   const { data: comments } = await client.issues.listComments({
     ...repo,
-    issue_number: issue.number
+    issue_number: pullNumber
   });
 
   const DEPLOY_COMMENT_TEMPLATE = `:blue_heart: ${namespace} successfully deployed`;
@@ -22,7 +22,7 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, issue, pu
     core.info(`deployment comment does not exist. creating new one.`)
     await client.issues.createComment({
       ...repo,
-      issue_number: issue.number,
+      issue_number: pullNumber,
       body: newCommentBody
     });
   } else { // update existing
