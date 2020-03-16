@@ -28,6 +28,7 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, pullNumbe
   } else { // update existing
     core.info(`deployment comment already exists. updating it with new deploy URL.`)
     await client.issues.updateComment({
+      ...repo,
       comment_id: oldComment.id,
       body: newCommentBody
     })
