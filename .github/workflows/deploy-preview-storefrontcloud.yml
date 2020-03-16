@@ -1,0 +1,17 @@
+name: Deploy PR Preview on Storefrontcloud.io
+on: 
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Comment PR
+        if: success()
+        uses: mkucmus/storefrontcloud-comment-pr-preview-deploy@master
+        with:
+          preview_url: 'http://storefrontcloud.io'
+          token: "${{ github.token }}"
+          namespace: 'preview-instance'
