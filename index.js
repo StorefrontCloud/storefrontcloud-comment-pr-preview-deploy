@@ -1,17 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-<<<<<<< HEAD
-=======
-const isPush = ({eventName, issue: { number }}) => {
-  if (number && eventName !== 'push') {
-    return false;
-  }
-  
-  return true;
-}
-
->>>>>>> 4b04f9a41c178e825db72efaa19daf7dde726092
 const upsertDeployComment = async (client, repo, deployUrl, namespace, pullNumber) => {
   const { data: comments } = await client.issues.listComments({
     ...repo,
@@ -56,8 +45,4 @@ const upsertDeployComment = async (client, repo, deployUrl, namespace, pullNumbe
   } catch (e) {
     core.setFailed(e && e.message || "unknown error");
   }
-<<<<<<< HEAD
-=======
-  core.setFailed('dont allow - debug purposes')
->>>>>>> 4b04f9a41c178e825db72efaa19daf7dde726092
 })()
