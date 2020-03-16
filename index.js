@@ -15,7 +15,7 @@ const upsertDeployComment = async (client, repo, commitHash, deployUrl, namespac
     commit_sha: commitHash
   });
 
-  const DEPLOY_COMMENT_TEMPLATE = ':blue_heart: shopware-pwa successfully deployed';
+  const DEPLOY_COMMENT_TEMPLATE = `:blue_heart: ${namespace} successfully deployed`;
   const oldComment = comments.find(({body}) => body.startsWith(DEPLOY_COMMENT_TEMPLATE))
   const newCommentBody = `${DEPLOY_COMMENT_TEMPLATE} at ${deployUrl}`
   if (!oldComment) {
@@ -60,6 +60,5 @@ const upsertDeployComment = async (client, repo, commitHash, deployUrl, namespac
 
   const octokit = new github.GitHub(githubToken);
   await upsertDeployComment(octokit, repo, commitHash, previewUrl, namespace, isPush(github.context), issue);
-  throw "fail for tests";
-  
+  process.exit(1); // fail for tests
 })()
