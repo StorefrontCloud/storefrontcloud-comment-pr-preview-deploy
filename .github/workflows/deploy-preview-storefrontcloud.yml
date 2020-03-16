@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Comment PR
         if: success()
-        uses: mkucmus/storefrontcloud-comment-pr-preview-deploy@master
+        uses: mkucmus/storefrontcloud-comment-pr-preview-deploy@test/01
         with:
           preview_url: 'http://storefrontcloud.io'
           token: "${{ github.token }}"
