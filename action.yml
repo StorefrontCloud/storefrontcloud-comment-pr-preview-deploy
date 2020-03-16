@@ -1,0 +1,21 @@
+name: 'Comment PR for Preview Deploy on Storefrontcloud.io'
+description: 'Update your PR with new preview URL'
+branding:
+  icon: 'message-circle'
+  color: 'blue'
+inputs:
+  token:
+    description: 'Github API token'
+    required: true
+  namespace:
+    description: 'Project namespace on Storefrontcloud.io'
+    required: true
+  preview_url:
+    description: 'Preview URL from Storefrontcloud.io'
+    required: false
+outputs:
+  preview_url:
+    description: 'Deployed instance URL for given PR'
+runs:
+  using: 'node12'
+  main: 'index.js'
